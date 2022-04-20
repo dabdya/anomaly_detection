@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 import numpy as np
+from IPython.display import display, Markdown, Latex
+
 
 def load_df(path, anomaly=''):
 
@@ -23,3 +25,17 @@ def create_sequences(values, time_steps):
     for i in range(len(values) - time_steps + 1):
         output.append(values[i : (i + time_steps)])
     return np.stack(output)
+
+
+def show_score_table(metrics:dict) -> None:
+    columns = list(metrics.keys())
+    metrics_arr = np.array(list(metrics.values()))
+    metric_names = ["F1", "FAR", "MAR"]
+    table = []
+    table.append(" | ".join(["metric"] + columns))
+    table.append(" | ".join(["---" for _ in range(len(columns) + 1)]))
+    for i in range(metrics_arr.shape[-1]):
+        row = metrics_arr[:, i]
+        table.append(f"{metric_names[i]} |" + " | ".join(map(lambda x: str(round(x, 2)), row)))
+    table_str = "\n".join(table)    
+    display(Markdown(table_str))
