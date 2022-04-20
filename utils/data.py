@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 
 def load_df(path, anomaly=''):
 
@@ -15,3 +16,10 @@ def load_df(path, anomaly=''):
 	anomaly_free_df = pd.read_csv([file for file in all_files if 'anomaly-free' in file][0], 
 		                          sep=';', index_col='datetime', parse_dates=True)
 	return list_of_df, anomaly_free_df
+
+# Generated training sequences for use in the model.
+def create_sequences(values, time_steps):
+    output = []
+    for i in range(len(values) - time_steps + 1):
+        output.append(values[i : (i + time_steps)])
+    return np.stack(output)
