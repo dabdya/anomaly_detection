@@ -18,6 +18,8 @@ class Pipeline:
         self.print_scores = print_scores
         self.show_plots = show_plots
         
+        self.all_predictions = []
+        
     def _show_bar(self, size):
         bar = IntProgress(
             min=0, max=len(size), 
@@ -62,5 +64,7 @@ class Pipeline:
 
         if self.show_plots:
             self._show_plots(list_of_df, predictions)
+            
+        self.all_predictions.append(predictions)
             
         return f1, far_score, mar_score 
