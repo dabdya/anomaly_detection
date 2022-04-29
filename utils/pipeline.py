@@ -45,7 +45,7 @@ class Pipeline:
             plt.figure(figsize=(12,3))
             plt.title(f"dataframe №{i+1}")  
             list_of_df[i].anomaly.plot(label='true')
-            predictions[i].plot(label='mset')
+            predictions[i].plot(label='predicted')
             plt.legend()
         
     def run(self, list_of_df, predictor, anomaly_description=""):
