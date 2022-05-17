@@ -45,3 +45,31 @@ def show_score_table(metrics:dict) -> None:
         table.append(f"{metric_names[i]} |" + " | ".join(map(lambda x: str(round(x, 2)), row)))
     table_str = "\n".join(table)    
     display(Markdown(table_str))
+
+    
+def load_df_with_names(path, anomaly=""):
+    
+    if anomaly not in ["valve1", "valve2", "other", "all", ]:
+        raise ValueError("Unexpected anomaly type")
+        
+    if anomaly == "all":
+        anomaly = ""
+
+    all_files=[]
+    file_names=[]
+    for root, dirs, files in os.walk("./data/"):
+        for file in files:
+            if file.endswith(".csv"):
+                all_files.append(os.path.join(root, file))
+                
+                
+    list_of_df=[]          
+    for file in all_files:
+        if 'anomaly-free' not in file and anomaly in file and ".ipynb_checkpoints" not in file:
+            list_of_df.append(pd.read_csv(file, sep=';', index_col='datetime', parse_dates=True))
+            file_names.append(file)
+                    
+
+    anomaly_free_df = pd.read_csv([file for file in all_files if 'anomaly-free' in file][0], 
+                                  sep=';', index_col='datetime', parse_dates=True)
+    return list_of_df, anomaly_free_df, file_names
